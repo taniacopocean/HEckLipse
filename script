@@ -1,0 +1,255 @@
+if(!window.requestAnimationFrame){
+ 
+	window.requestAnimationFrame = (function(){
+ 
+	return window.webkitRequestAnimationFrame ||
+	window.mozRequestAnimationFrame ||
+	window.oRequestAnimationFrame ||
+	window.msRequestAnimationFrame ||
+	function( /* function FrameRequestCallback */ callback, /* DOMElement Element */ element ) {
+ 
+		window.setTimeout( callback, 1000 / 60 );
+ 
+		};
+ 
+	} )();
+ 
+}
+ 
+ 
+ var ball1;
+ var ball2;
+ var w;
+ var h;
+ var epsilon = 82;
+ var initial = 1000;
+ var count = initial;
+ var counter;
+ 
+function tryAgain() {
+	document.body.style.background = "white";
+	document.getElementById("tryAgainMenu").style.visibility = "visible";
+	document.getElementById("ball1").style.visibility = "hidden";
+	document.getElementById("ball2").style.visibility = "hidden";
+}
+
+function timer() {
+	if (count <= 0) {
+		clearInterval(counter);
+		return;
+        }
+        count--;
+        displayCount(count);
+}
+
+function displayCount(count) {
+        var res = count;
+        document.getElementById("timer").innerHTML = "SCORE " + res.toPrecision(count.toString().length);
+    }
+ 
+function init()
+{	
+	document.body.style.background = "black";
+	document.getElementById("startMenu").style.visibility = "hidden";
+	document.getElementById("tryAgainMenu").style.visibility = "hidden";	
+	document.getElementById("ball1").style.visibility = "visible";
+	document.getElementById("ball2").style.visibility = "visible";
+	var w = window.innerWidth;
+	var h = window.innerHeight;
+     
+	ball1 = createBall('ball1',0,0);
+	ball2 = createBall2('ball2',w - 295 ,h - 295);
+    
+    	alert("Try to combine the two objects as fast as you can!");
+	update();
+	counter = setInterval(timer, 10);
+	
+}
+
+function createBall(name, oX, oY) {
+
+	var ball = document.getElementById(name);
+	var w = window.innerWidth;
+    	var h = window.innerHeight;
+	
+	ball.style.left = (w) + 300 +"px";
+	ball.style.top = (h) + 300 + "px";	
+	
+	ball.velocity = {x:1,y:1}
+	ball.position = {x:oX,y:oY}
+    
+    if (window.DeviceOrientationEvent) {
+		
+		window.addEventListener("deviceorientation", function(event) 
+		{
+			ball.velocity.y = Math.round(event.beta);
+			ball.velocity.x = Math.round(event.gamma);
+		})
+	}
+
+	return ball;
+}
+
+function createBall2(name, oX, oY) {
+
+	var ball = document.getElementById(name);
+	var w = window.innerWidth;
+    	var h = window.innerHeight;
+	
+	ball.style.left = (w) +"px";
+	ball.style.top = (h) + "px";	
+	
+	ball.velocity = {x:1,y:1}
+	ball.position = {x:oX,y:oY}
+    
+    if (window.DeviceOrientationEvent) {
+		
+		window.addEventListener("deviceorientation", function(event) 
+		{
+			ball.velocity.y = Math.round(event.beta);
+			ball.velocity.x = Math.round(event.gamma);
+		})
+	}
+
+	return ball;
+}
+
+function updateBall1(ball) {
+    
+	var w = window.innerWidth;
+        var h = window.innerHeight;
+
+	ball.position.x += ball.velocity.x;
+	ball.position.y += ball.velocity.y;
+    
+	if(ball.position.x > (w-300) && ball.velocity.x > 0)
+	{
+	   ball.position.x = w-300;
+	}
+		
+	if(ball.position.x < 0 && ball.velocity.x < 0)
+	{
+		ball.position.x = 0;
+	}
+	
+	if(ball.position.y > (h-300) && ball.velocity.y > 0)
+	{
+	   ball.position.y = h-300;
+	}
+	
+	if(ball.position.y < 0 && ball.velocity.y < 0)
+	{
+	   ball.position.y = 0;
+	}
+    
+	ball.style.top = ball.position.y + "px"
+	ball.style.left = ball.position.x + "px"
+}
+ 
+function updateBall2(ball) {
+
+	var w = window.innerWidth;
+	var h = window.innerHeight;
+	
+
+	ball.position.x -= ball.velocity.x;
+	ball.position.y -= ball.velocity.y;
+
+	if(ball.position.x > (w-295) && ball.velocity.x < 0)
+	{
+	   ball.position.x = w-295;
+	}
+		
+	if(ball.position.x < 0 && ball.velocity.x > 0)
+	{
+		ball.position.x = 0;
+	}
+	
+	if(ball.position.y > (h-295) && ball.velocity.y < 0)
+	{
+	   ball.position.y = h-295;
+	}
+	
+	if(ball.position.y < 0 && ball.velocity.y > 0)
+	{
+	   ball.position.y = 0;
+	}
+    
+	ball.style.top = ball.position.y + "px"
+	ball.style.left = ball.position.x + "px"
+}
+ 
+ function update()
+{
+    	var supportsVibrate = "vibrate" in navigator;
+    	
+	updateBall1(ball1);
+	updateBall2(ball2);
+    
+	if (((Math.pow(Math.abs(ball1.position.x - ball2.position.x),2) + Math.pow(Math.abs(ball1.position.y - ball2.position.y),2)) < epsilon) || count == 0){
+	
+	document.getElementById("scoreNumber").innerHTML = count;
+	clearInterval(counter);
+	count = initial;
+	tryAgain();
+                
+	}
+	else
+	{
+	
+	requestAnimationFrame(update); //KEEP ANIMATING
+
+	}
+}
+
+function start(level){
+	if(level == 0){
+	init();
+	}	
+	
+	if(level == 1){
+	level1();
+	}
+}
+
+function level1(){
+	
+	document.body.style.background = "black";
+	document.getElementById("startMenu").style.visibility = "hidden";
+	document.getElementById("tryAgainMenu").style.visibility = "hidden";	
+	document.getElementById("ball1").style.visibility = "visible";
+	document.getElementById("ball2").style.visibility = "visible";
+	var w = window.innerWidth;
+	var h = window.innerHeight;
+     
+	ball1 = createBall('ball1',0,0);
+	ball2 = createBall2('ball2',w - 295 ,h - 295);
+    
+    	alert("In this level you have to combine the two objects within a meteor shower. Destroy the small black circles to be able to combine them.");
+	updatelevel1();
+	
+	counter = setInterval(timer, 15);
+}
+
+function updatelevel1()
+{
+    	
+	updateBall1(ball1);
+	updateBall2(ball2);
+    
+	if (((Math.pow(Math.abs(ball1.position.x - ball2.position.x),2) + Math.pow(Math.abs(ball1.position.y - ball2.position.y),2)) < epsilon) && achieved || count == 0){
+	
+	document.getElementById("scoreNumber").innerHTML = count;
+	clearInterval(counter);
+	count = initial;
+	tryAgain();
+                
+	}
+	else
+	{
+	
+	requestAnimationFrame(update); //KEEP ANIMATING
+
+	}
+}
+
