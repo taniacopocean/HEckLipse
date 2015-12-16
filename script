@@ -247,7 +247,7 @@ function updatelevel1()
 	}
 	else
 	{
-	
+	 
 	requestAnimationFrame(update); //KEEP ANIMATING
 
 	}
