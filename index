@@ -15,7 +15,7 @@
 	<div id="gameTitle">Eclipse</div>
 	<img src="eclipse_logo.png" id="logo" />
 	<a href = "#" onclick="init()">PLAY</a>
-	</div>
+	</div> 
 	
 	<div id="tryAgainMenu">
 	<div id="scoreText">YOU SCORED</div>
