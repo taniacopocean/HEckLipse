@@ -1,6 +1,6 @@
 if(!window.requestAnimationFrame){
  
-	window.requestAnimationFrame = (function(){
+	window.requestAnimationFrame = (function(){ 
  
 	return window.webkitRequestAnimationFrame ||
 	window.mozRequestAnimationFrame ||
